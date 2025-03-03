@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMeals } from '../../api/api';
+import { fetchCategories, fetchMeals } from '../../api/api';
 import { Link } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import RecipeCard from '../../component/RecipeCard';
@@ -44,6 +44,12 @@ const AllRecipesPage: React.FC = () => {
     enabled: true, 
   });
 
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  });
+
+  
   const filteredMeals = useMemo(() => {
     if (!data?.meals) return [];
     return searchQuery.length > 0
@@ -68,17 +74,18 @@ const AllRecipesPage: React.FC = () => {
           value={searchQuery}
         />
         <select
-          className="category-select"
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          value={selectedCategory}
-        >
-          <option value="">All Categories</option>
-          {Array.from(new Set(data?.meals?.map((meal: any) => meal.strCategory))).map((category: any) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+  className="category-select"
+  onChange={(e) => setSelectedCategory(e.target.value)}
+  value={selectedCategory}
+>
+  <option value="">All Categories</option>
+  {categoriesData?.categories.map((category) => (
+    <option key={category.strCategory} value={category.strCategory}>
+      {category.strCategory}
+    </option>
+  ))}
+</select>
+
 
         <Link to="/favorites" className="favorites-button">
           Go to Favorites

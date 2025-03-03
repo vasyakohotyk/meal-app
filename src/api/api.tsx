@@ -28,12 +28,19 @@ interface MealsResponse {
 export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsParams] }): Promise<MealsResponse> => {
   const [_key, { query, page, category }] = queryKey;
 
-  const response = await axios.get<MealsResponse>(
-    `${API_URL}search.php?s=${query || ""}&page=${page || 1}${category ? `&c=${category}` : ""}`
-  );
+  const url = category
+    ? `${API_URL}filter.php?c=${category}`
+    : `${API_URL}search.php?s=${query || ""}&page=${page || 1}`;
 
+  console.log("Fetching meals from:", url);
+
+  const response = await axios.get<MealsResponse>(url);
   return response.data;
 };
+
+
+
+
 
 export const fetchMealById = async (id: string | undefined): Promise<Meal | undefined> => {
   if (!id) return undefined;
@@ -50,4 +57,10 @@ export const fetchMealById = async (id: string | undefined): Promise<Meal | unde
     console.error('Error fetching meal:', error);
     return undefined;
   }
+};
+
+
+export const fetchCategories = async (): Promise<{ categories: { strCategory: string }[] }> => {
+  const response = await axios.get(`${API_URL}categories.php`);
+  return response.data;
 };
