@@ -85,8 +85,8 @@ const FavoriteRecipesPage: React.FC = () => {
           )}
           <h2>Cooking Instructions</h2>
           {favorites.map((meal) => (
-  <div key={meal.idMeal} className="instruction-block">
-    <h3>{meal.strMeal}</h3>
+            <div style={{ marginLeft: '10px', marginRight: '10px', border: '#36d7b7'}} key={meal.idMeal} className="instruction-block">
+            <h3>{meal.strMeal}</h3>
     <p>{meal.strInstructions}</p>
   </div>
 ))}
