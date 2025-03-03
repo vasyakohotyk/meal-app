@@ -1,0 +1,118 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchMeals } from '../../api/api';
+import { Link } from 'react-router-dom';
+import debounce from 'lodash.debounce';
+import RecipeCard from '../../component/RecipeCard';
+import './AllRecipes.css';
+import { ClipLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+import Pagination from '../../component/Pagination';
+
+// Вказуємо типи як any для уникнення помилок
+interface Meal {
+  idMeal: string;
+  strCategory: string;
+  strMeal: string;
+  strMealThumb: string;
+}
+
+interface MealsData {
+  meals: Meal[];
+  totalResults: number;
+}
+
+const AllRecipesPage: React.FC = () => {
+  const [page, setPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>(localStorage.getItem('searchQuery') || '');
+  const [selectedCategory, setSelectedCategory] = useState<string>(localStorage.getItem('selectedCategory') || '');
+
+  useEffect(() => {
+    localStorage.setItem('searchQuery', searchQuery);
+    localStorage.setItem('selectedCategory', selectedCategory);
+  }, [searchQuery, selectedCategory]);
+
+  // Дебаунс для запиту до сервера через 3 секунди після завершення вводу
+  const handleSearchChange = debounce((query: string) => {
+    setSearchQuery(query);
+    setPage(1);
+  }, 3000); // 3 секунди
+
+  //@ts-ignore
+  const { data, isLoading, isError }: { data: MealsData | any, isLoading: boolean, isError: boolean } = useQuery({
+    queryKey: ['meals', { query: searchQuery, page, category: selectedCategory, limit: 5 }],
+    queryFn: fetchMeals,
+    keepPreviousData: true,
+    enabled: true, // Увімкнено завжди, щоб завантажити дані незалежно від пошуку
+  });
+
+  const filteredMeals = useMemo(() => {
+    if (!data?.meals) return [];
+    return searchQuery.length > 0
+      ? data.meals.filter((meal: any) => meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase()))
+      : data.meals; // Повертаємо всі рецепти, якщо пошукове поле порожнє
+  }, [data, searchQuery, selectedCategory]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  return (
+    <div className="recipes-page">
+      <h1 className="page-title">All Recipes</h1>
+
+      <div className="search-filter">
+        <input
+          className="search-input"
+          type="text"
+          onChange={(e) => setSearchQuery(e.target.value)} // Текст вводиться без затримки
+          placeholder="Search for recipes..."
+          value={searchQuery}
+        />
+        <select
+          className="category-select"
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          value={selectedCategory}
+        >
+          <option value="">All Categories</option>
+          {Array.from(new Set(data?.meals?.map((meal: any) => meal.strCategory))).map((category: any) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+
+        <Link to="/favorites" className="favorites-button">
+          Go to Favorites
+        </Link>
+      </div>
+
+      {/* Якщо поле пошуку порожнє, відображаємо весь список */}
+      {isLoading ? (
+        <div className="loader-container">
+          <ClipLoader className='' color="#36d7b7" size={50} />
+        </div>
+      ) : (
+        <div className="recipes">
+          {/* Якщо пошукове поле порожнє, відображаємо всі рецепти */}
+          {searchQuery.length === 0 ? (
+            data?.meals?.map((meal: any) => (
+              <RecipeCard key={meal.idMeal} meal={meal} onRemove={() => {}} />
+            ))
+          ) : (
+            filteredMeals.length > 0 ? (
+              filteredMeals.map((meal: any) => (
+                <RecipeCard key={meal.idMeal} meal={meal} onRemove={() => {}} />
+              ))
+            ) : (
+              <div className="no-recipes-container">No recipes found</div>
+            )
+          )}
+        <Pagination  totalPages={10} currentPage={1} onPageChange={handlePageChange}/>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AllRecipesPage;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import AllRecipesPage from './pages/AllRecipesPage';
-import SingleRecipePage from './pages/SingleRecipePage';
-import FavoriteRecipesPage from './pages/FavoriteRecipesPage';
+import AllRecipesPage from './pages/AllRecipes/AllRecipesPage';
+import SingleRecipePage from './pages/SingleRecipes/SingleRecipePage';
+import FavoriteRecipesPage from './pages/FavoriteRecipes/FavoriteRecipesPage';
 
 const queryClient = new QueryClient();
 

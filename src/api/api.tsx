@@ -40,4 +40,3 @@ export const fetchMealById = async (id: string | undefined): Promise<Meal | unde
   const data = await response.json();
   return data.meal || undefined;
 };
-

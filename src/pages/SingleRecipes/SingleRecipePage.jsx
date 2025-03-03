@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMealById } from '../api/api';
+import { fetchMealById } from '../../api/api';
 import { useParams, Link } from 'react-router-dom';
-import useFavoriteStore from '../store/useFavoriteStore'; // Підключаємо zustand
+import useFavoriteStore from '../../store/useFavoriteStore'; // Підключаємо zustand
 import { Button } from '@mui/material'; // Імпортуємо компонент Button з MUI
 
 import './SingleRecipePage.css'

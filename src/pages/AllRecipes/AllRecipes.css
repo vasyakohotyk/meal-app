@@ -104,10 +104,29 @@ body {
     text-decoration: underline;
   }
   
-  /* Стилі для заголовку */
   .page-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
   }
   
+
+/* Лоадер */
+.loader-container {
+  display: flex;
+  justify-content: center; /* Центруємо по горизонталі */
+  align-items: center; /* Центруємо по вертикалі */
+  height: 100vh; /* Повна висота сторінки */
+  width: 100%; /* Повна ширина сторінки */
+}
+
+/* Повідомлення про відсутність рецептів */
+.no-recipes-container {
+  display: flex;
+  justify-content: center; /* Центруємо по горизонталі */
+  align-items: center; /* Центруємо по вертикалі */
+  height: 100vh; /* Повна висота сторінки */
+  width: 95vw; /* Повна ширина сторінки */
+  font-size: 1.5rem;
+  color: #666;
+}

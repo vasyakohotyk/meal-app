@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import useFavoriteStore from '../store/useFavoriteStore';
+import useFavoriteStore from '../../store/useFavoriteStore';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import RecipeCard from '../component/RecipeCard';
+import RecipeCard from '../../component/RecipeCard';
 
 // Define types for the ingredients and meals
 type Meal = {
