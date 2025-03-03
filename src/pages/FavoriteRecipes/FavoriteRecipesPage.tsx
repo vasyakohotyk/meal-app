@@ -97,10 +97,10 @@ const FavoriteRecipesPage: React.FC = () => {
             }}
           >
             {/* 🔹 Блок інгредієнтів */}
-            <Card sx={{minWidth: 500, maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
+            <Card sx={{minWidth: 340, maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                  Ingredients Needed for all dishhes
+                  Ingredients Needed for all dishes
                 </Typography>
                 <List>
                   {ingredientsList.map((item, index) => (
