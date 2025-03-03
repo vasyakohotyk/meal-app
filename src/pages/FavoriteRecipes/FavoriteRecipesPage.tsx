@@ -19,35 +19,47 @@ interface Ingredient {
   quantity: string;
 }
 
+const parseQuantity = (measure: string): { value: number; unit: string } => {
+  const match = measure.match(/([\d.]+)\s*([a-zA-Z]*)/);
+  if (match) {
+    return { value: parseFloat(match[1]), unit: match[2] || '' };
+  }
+  return { value: 0, unit: measure };
+};
+
 const FavoriteRecipesPage: React.FC = () => {
   const { favorites, removeFromFavorites } = useFavoriteStore();
 
   const ingredientsList = useMemo<Ingredient[]>(() => {
-    const ingredientsMap = new Map<string, Ingredient>();
+    const ingredientsMap = new Map<string, { value: number; unit: string }>();
 
     favorites.forEach((meal: Meal) => {
       for (let i = 1; i <= 20; i++) {
         const ingredient = meal[`strIngredient${i}` as keyof Meal] as string;
-        const measure = meal[`strMeasure${i}` as keyof Meal] as string;
+        const measure = meal[`strMeasure${i}` as keyof Meal] || '';
 
         if (ingredient) {
           const key = ingredient.toLowerCase();
+          const { value, unit } = parseQuantity(measure);
+
           if (ingredientsMap.has(key)) {
-            ingredientsMap.set(key, {
-              name: ingredient,
-              quantity: `${ingredientsMap.get(key)?.quantity} + ${measure || 'N/A'}`,
-            });
+            const existing = ingredientsMap.get(key)!;
+            if (existing.unit === unit) {
+              existing.value += value;
+            } else {
+              existing.value += value; // Якщо одиниці різні, просто додаємо (можливо, знадобиться покращити логіку)
+            }
           } else {
-            ingredientsMap.set(key, {
-              name: ingredient,
-              quantity: measure || 'N/A',
-            });
+            ingredientsMap.set(key, { value, unit });
           }
         }
       }
     });
 
-    return Array.from(ingredientsMap.values());
+    return Array.from(ingredientsMap.entries()).map(([name, { value, unit }]) => ({
+      name,
+      quantity: `${value} ${unit}`.trim(),
+    }));
   }, [favorites]);
 
   return (
