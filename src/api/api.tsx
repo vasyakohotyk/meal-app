@@ -36,7 +36,17 @@ export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsPa
 
 export const fetchMealById = async (id: string | undefined): Promise<Meal | undefined> => {
   if (!id) return undefined;
-  const response = await fetch(`https://api.example.com/meal/${id}`);
-  const data = await response.json();
-  return data.meal || undefined;
+
+  try {
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log('API Response:', data); // ДОДАНО ЛОГ
+    return data.meals ? data.meals[0] : undefined;
+  } catch (error) {
+    console.error('Error fetching meal:', error);
+    return undefined;
+  }
 };
