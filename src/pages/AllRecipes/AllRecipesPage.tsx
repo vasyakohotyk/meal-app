@@ -31,16 +31,7 @@ const AllRecipesPage: React.FC = () => {
     localStorage.setItem('selectedCategory', selectedCategory);
   }, [searchQuery, selectedCategory]);
 
-  // Debounced search query handler
-  const debouncedSearchQuery = useMemo(
-    () => debounce((query: string) => setSearchQuery(query), 500),
-    []
-  );
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    debouncedSearchQuery(value); // Call debounced function instead of updating state immediately
-  };
+  
 
   //@ts-ignore
   const { data, isLoading, isError }: { data: MealsData | any, isLoading: boolean, isError: boolean } = useQuery({
@@ -55,6 +46,7 @@ const AllRecipesPage: React.FC = () => {
     queryFn: fetchCategories,
   });
 
+  
   const filteredMeals = useMemo(() => {
     if (!data?.meals) return [];
     return searchQuery.length > 0
@@ -74,34 +66,37 @@ const AllRecipesPage: React.FC = () => {
         <input
           className="search-input"
           type="text"
-          onChange={handleSearchChange} // Use debounced change handler
+          onChange={(e) => setSearchQuery(e.target.value)} 
           placeholder="Search for recipes..."
           value={searchQuery}
         />
         <select
-          className="category-select"
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          value={selectedCategory}
-        >
-          <option value="">All Categories</option>
-          {categoriesData?.categories.map((category) => (
-            <option key={category.strCategory} value={category.strCategory}>
-              {category.strCategory}
-            </option>
-          ))}
-        </select>
+  className="category-select"
+  onChange={(e) => setSelectedCategory(e.target.value)}
+  value={selectedCategory}
+>
+  <option value="">All Categories</option>
+  {categoriesData?.categories.map((category) => (
+    <option key={category.strCategory} value={category.strCategory}>
+      {category.strCategory}
+    </option>
+  ))}
+</select>
+
 
         <Link to="/favorites" className="favorites-button">
           Go to Favorites
         </Link>
       </div>
 
+     
       {isLoading ? (
         <div className="loader-container">
           <ClipLoader className='' color="#36d7b7" size={50} />
         </div>
       ) : (
         <div className="recipes">
+        
           {searchQuery.length === 0 ? (
             data?.meals?.map((meal: any) => (
               <RecipeCard key={meal.idMeal} meal={meal} onRemove={() => {}} />
@@ -115,11 +110,12 @@ const AllRecipesPage: React.FC = () => {
               <div className="no-recipes-container">No recipes found</div>
             )
           )}
-          {filteredMeals.length > 10 &&
-            <div className='pagin'>
-              <Pagination totalPages={67} currentPage={page} onPageChange={handlePageChange} />
-            </div>
-          }
+        {filteredMeals.length > 10 &&
+         <div className='pagin'>
+           <Pagination  totalPages={67} currentPage={page} onPageChange={handlePageChange}/>
+         </div>
+         
+         }
         </div>
       )}
     </div>
