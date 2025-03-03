@@ -18,7 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
     let pages: JSX.Element[] = [];
 
     if (totalPages > 7) {
-      // Перші 7 сторінок
+      
       for (let i = 1; i <= 7; i++) {
         pages.push(
           <button
@@ -31,12 +31,11 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
         );
       }
 
-      // Якщо більше ніж 7 сторінок, додаємо "..."
+     
       if (currentPage < totalPages - 3) {
         pages.push(<span key="ellipsis-start">...</span>);
       }
 
-      // Остання сторінка
       pages.push(
         <button
           key={totalPages}
@@ -47,7 +46,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
         </button>
       );
     } else {
-      // Якщо сторінок менше або рівно 7, просто відображаємо їх
+    
       for (let i = 1; i <= totalPages; i++) {
         pages.push(
           <button
@@ -70,14 +69,14 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        &#60; Prev
+        &#60; 
       </button>
       {renderPagination()}
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Next &#62;
+         &#62;
       </button>
     </div>
   );

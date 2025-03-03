@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RecipeCard from '../../component/RecipeCard';
 
-// Define types for the ingredients and meals
 type Meal = {
   idMeal: string;
   strMeal: string;
@@ -21,7 +20,6 @@ interface Ingredient {
 const FavoriteRecipesPage: React.FC = () => {
   const { favorites, removeFromFavorites } = useFavoriteStore();
 
-  // Обчислюємо загальний список інгредієнтів
   const ingredientsList = useMemo<Ingredient[]>(() => {
     const ingredientsMap = new Map<string, Ingredient>();
 
@@ -31,7 +29,7 @@ const FavoriteRecipesPage: React.FC = () => {
         const measure = meal[`strMeasure${i}` as keyof Meal];
 
         if (ingredient) {
-          const key = ingredient.toLowerCase(); // Робимо ключ регістронезалежним
+          const key = ingredient.toLowerCase(); 
           if (ingredientsMap.has(key)) {
             ingredientsMap.set(key, {
               name: ingredient,
@@ -40,7 +38,7 @@ const FavoriteRecipesPage: React.FC = () => {
           } else {
             ingredientsMap.set(key, {
               name: ingredient,
-              quantity: measure || 'N/A', // Show 'N/A' if measure is missing
+              quantity: measure || 'N/A', 
             });
           }
         }
@@ -72,7 +70,7 @@ const FavoriteRecipesPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Відображення загального списку інгредієнтів */}
+          
           <h2>Ingredients Needed</h2>
           {ingredientsList.length === 0 ? (
             <p>No ingredients required</p>
@@ -85,6 +83,14 @@ const FavoriteRecipesPage: React.FC = () => {
               ))}
             </ul>
           )}
+          <h2>Cooking Instructions</h2>
+          {favorites.map((meal) => (
+  <div key={meal.idMeal} className="instruction-block">
+    <h3>{meal.strMeal}</h3>
+    <p>{meal.strInstructions}</p>
+  </div>
+))}
+
         </>
       )}
     </div>

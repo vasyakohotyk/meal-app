@@ -6,8 +6,7 @@ import debounce from 'lodash.debounce';
 import RecipeCard from '../../component/RecipeCard';
 import './AllRecipes.css';
 import { ClipLoader } from 'react-spinners';
-import { toast } from 'react-toastify';
-import Pagination from '../../component/Pagination';
+import Pagination from '../../component/Pagination/Pagination';
 
 // Вказуємо типи як any для уникнення помилок
 interface Meal {
@@ -32,25 +31,24 @@ const AllRecipesPage: React.FC = () => {
     localStorage.setItem('selectedCategory', selectedCategory);
   }, [searchQuery, selectedCategory]);
 
-  // Дебаунс для запиту до сервера через 3 секунди після завершення вводу
   const handleSearchChange = debounce((query: string) => {
     setSearchQuery(query);
     setPage(1);
-  }, 3000); // 3 секунди
+  }, 3000);
 
   //@ts-ignore
   const { data, isLoading, isError }: { data: MealsData | any, isLoading: boolean, isError: boolean } = useQuery({
     queryKey: ['meals', { query: searchQuery, page, category: selectedCategory, limit: 5 }],
     queryFn: fetchMeals,
     keepPreviousData: true,
-    enabled: true, // Увімкнено завжди, щоб завантажити дані незалежно від пошуку
+    enabled: true, 
   });
 
   const filteredMeals = useMemo(() => {
     if (!data?.meals) return [];
     return searchQuery.length > 0
       ? data.meals.filter((meal: any) => meal.strMeal.toLowerCase().includes(searchQuery.toLowerCase()))
-      : data.meals; // Повертаємо всі рецепти, якщо пошукове поле порожнє
+      : data.meals; 
   }, [data, searchQuery, selectedCategory]);
 
   const handlePageChange = (newPage: number) => {
@@ -87,14 +85,14 @@ const AllRecipesPage: React.FC = () => {
         </Link>
       </div>
 
-      {/* Якщо поле пошуку порожнє, відображаємо весь список */}
+     
       {isLoading ? (
         <div className="loader-container">
           <ClipLoader className='' color="#36d7b7" size={50} />
         </div>
       ) : (
         <div className="recipes">
-          {/* Якщо пошукове поле порожнє, відображаємо всі рецепти */}
+        
           {searchQuery.length === 0 ? (
             data?.meals?.map((meal: any) => (
               <RecipeCard key={meal.idMeal} meal={meal} onRemove={() => {}} />
@@ -108,7 +106,12 @@ const AllRecipesPage: React.FC = () => {
               <div className="no-recipes-container">No recipes found</div>
             )
           )}
-        <Pagination  totalPages={10} currentPage={1} onPageChange={handlePageChange}/>
+        {filteredMeals.length > 10 &&
+         <div className='pagin'>
+           <Pagination  totalPages={67} currentPage={page} onPageChange={handlePageChange}/>
+         </div>
+         
+         }
         </div>
       )}
     </div>
