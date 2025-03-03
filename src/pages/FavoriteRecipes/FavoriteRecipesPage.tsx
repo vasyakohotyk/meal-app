@@ -10,6 +10,8 @@ type Meal = {
   strCategory: string;
   strArea: string;
   strMealThumb: string;
+  strInstructions: string;
+  [key: string]: string | undefined;
 };
 
 interface Ingredient {
@@ -25,11 +27,11 @@ const FavoriteRecipesPage: React.FC = () => {
 
     favorites.forEach((meal: Meal) => {
       for (let i = 1; i <= 20; i++) {
-        const ingredient = meal[`strIngredient${i}` as keyof Meal];
-        const measure = meal[`strMeasure${i}` as keyof Meal];
+        const ingredient = meal[`strIngredient${i}` as keyof Meal] as string;
+        const measure = meal[`strMeasure${i}` as keyof Meal] as string;
 
         if (ingredient) {
-          const key = ingredient.toLowerCase(); 
+          const key = ingredient.toLowerCase();
           if (ingredientsMap.has(key)) {
             ingredientsMap.set(key, {
               name: ingredient,
@@ -38,7 +40,7 @@ const FavoriteRecipesPage: React.FC = () => {
           } else {
             ingredientsMap.set(key, {
               name: ingredient,
-              quantity: measure || 'N/A', 
+              quantity: measure || 'N/A',
             });
           }
         }
@@ -70,7 +72,6 @@ const FavoriteRecipesPage: React.FC = () => {
             ))}
           </div>
 
-          
           <h2>Ingredients Needed</h2>
           {ingredientsList.length === 0 ? (
             <p>No ingredients required</p>
@@ -83,14 +84,38 @@ const FavoriteRecipesPage: React.FC = () => {
               ))}
             </ul>
           )}
-          <h2>Cooking Instructions</h2>
-          {favorites.map((meal) => (
-            <div style={{ marginLeft: '10px', marginRight: '10px', border: '#36d7b7'}} key={meal.idMeal} className="instruction-block">
-            <h3>{meal.strMeal}</h3>
-    <p>{meal.strInstructions}</p>
-  </div>
-))}
 
+          <h2>Cooking Instructions</h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '5px',
+              padding: '40px',
+            }}
+          >
+            {favorites.map((meal) => (
+              <div
+                style={{
+                  padding: '15px',
+                  borderRadius: '10px',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                  backgroundColor: '#fff',
+                  maxWidth: '400px',
+                  minWidth: '300px',
+                }}
+                key={meal.idMeal}
+                className="instruction-block"
+              >
+                <h3 style={{ marginBottom: '10px', fontSize: '18px', fontWeight: 'bold' }}>
+                  {meal.strMeal}
+                </h3>
+                <p style={{ fontSize: '14px', color: '#555' }}>
+                  {meal.strInstructions}
+                </p>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>
