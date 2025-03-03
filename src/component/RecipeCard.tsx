@@ -15,6 +15,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ meal, onRemove, showRemoveButton = false }) => {
+  console.log(meal); 
   return (
     <div className="recipe-card">
       <img src={meal.strMealThumb} alt={meal.strMeal} />
@@ -22,26 +23,25 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ meal, onRemove, showRemoveButto
       <p>{meal.strCategory}</p>
       <p>{meal.strArea}</p>
 
-      {/* Кнопка "View Recipe" */}
+      
       <Link to={`/recipe/${meal.idMeal}`} className="recipe-link">
         <Button
           color="primary"
           variant="outlined"
           style={{
-            marginBottom: '10px', // Відступ знизу
+            marginBottom: '10px', 
           }}
         >
           View Recipe
         </Button>
       </Link>
 
-      {/* Кнопка "Remove" тільки для улюблених рецептів */}
       {showRemoveButton && (
         <Button
           color="error"
           className="recipe-card-button"
           style={{
-            marginBottom: '10px', // Відступ знизу
+            marginBottom: '10px', 
             marginLeft: '2px',
           }}
           onClick={() => onRemove(meal.idMeal)}

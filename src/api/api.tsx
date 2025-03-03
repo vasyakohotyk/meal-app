@@ -23,20 +23,38 @@ interface Meal {
 // Тип для результату пошуку
 interface MealsResponse {
   meals: Meal[];
+  totalResults: number;
 }
 
 export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsParams] }): Promise<MealsResponse> => {
-  const [_key, { query, page, category }] = queryKey;
+  const [_key, { query, category }] = queryKey;
 
-  const url = category
-    ? `${API_URL}filter.php?c=${category}`
-    : `${API_URL}search.php?s=${query || ""}&page=${page || 1}`;
+  if (category) {
+    // 1️⃣ Отримуємо список страв у цій категорії
+    const response = await axios.get<{ meals: { idMeal: string }[] }>(
+      `${API_URL}filter.php?c=${category}`
+    );
 
-  console.log("Fetching meals from:", url);
+    if (!response.data.meals) return { meals: [], totalResults: 0 };
 
-  const response = await axios.get<MealsResponse>(url);
-  return response.data;
+    // 2️⃣ Для кожного ID страви отримуємо деталі через lookup.php?i=...
+    const detailedMeals = await Promise.all(
+      response.data.meals.map(async (meal) => {
+        const mealResponse = await axios.get<{ meals: Meal[] }>(
+          `${API_URL}lookup.php?i=${meal.idMeal}`
+        );
+        return mealResponse.data.meals[0]; // Повертаємо перший (єдиний) результат
+      })
+    );
+
+    return { meals: detailedMeals, totalResults: detailedMeals.length };
+  } else {
+    // Якщо категорія не вибрана, використовуємо стандартний пошук
+    const response = await axios.get<MealsResponse>(`${API_URL}search.php?s=${query || ""}`);
+    return response.data;
+  }
 };
+
 
 
 
