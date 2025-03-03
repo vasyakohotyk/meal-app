@@ -3,6 +3,8 @@ import useFavoriteStore from '../../store/useFavoriteStore';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RecipeCard from '../../component/RecipeCard';
+import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
+
 
 type Meal = {
   idMeal: string;
@@ -83,55 +85,70 @@ const FavoriteRecipesPage: React.FC = () => {
               <RecipeCard key={meal.idMeal} meal={meal} onRemove={removeFromFavorites} showRemoveButton={true} />
             ))}
           </div>
-
-          <h2>Ingredients Needed</h2>
-          {ingredientsList.length === 0 ? (
-            <p>No ingredients required</p>
-          ) : (
-            <ul>
-              {ingredientsList.map((item, index) => (
-                <li key={index}>
-                  <span>{item.name}</span>: {item.quantity}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <h2>Cooking Instructions</h2>
+  
+          {/* Контейнер для розташування двох блоків поруч */}
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '5px',
-              padding: '40px',
+              gap: '20px',
+              justifyContent: 'center',
+              padding: '20px',
             }}
           >
-            {favorites.map((meal) => (
-              <div
-                style={{
-                  padding: '15px',
-                  borderRadius: '10px',
-                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                  backgroundColor: '#fff',
-                  maxWidth: '400px',
-                  minWidth: '300px',
-                }}
-                key={meal.idMeal}
-                className="instruction-block"
-              >
-                <h3 style={{ marginBottom: '10px', fontSize: '18px', fontWeight: 'bold' }}>
-                  {meal.strMeal}
-                </h3>
-                <p style={{ fontSize: '14px', color: '#555' }}>
-                  {meal.strInstructions}
-                </p>
-              </div>
-            ))}
+            {/* 🔹 Блок інгредієнтів */}
+            <Card sx={{minWidth: 500, maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                  Ingredients Needed for all dishhes
+                </Typography>
+                <List>
+                  {ingredientsList.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem>
+                        <ListItemText
+                          primary={item.name}
+                          secondary={item.quantity}
+                          primaryTypographyProps={{ fontWeight: 'bold', fontSize: '16px' }}
+                          secondaryTypographyProps={{ color: 'text.secondary' }}
+                        />
+                      </ListItem>
+                      {index !== ingredientsList.length - 1 && <Divider />}
+                    </React.Fragment>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
+  
+            {/* 🔹 Блок інструкцій */}
+            <Card sx={{ maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                  Cooking Instructions
+                </Typography>
+                <List>
+                  {favorites.map((meal) => (
+                    <React.Fragment key={meal.idMeal}>
+                      <ListItem>
+                        <ListItemText
+                          primary={meal.strMeal}
+                          secondary={meal.strInstructions}
+                          primaryTypographyProps={{ fontWeight: 'bold', fontSize: '16px' }}
+                          secondaryTypographyProps={{ color: 'text.secondary' }}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
           </div>
         </>
       )}
     </div>
   );
+  
 };
 
 export default FavoriteRecipesPage;
