@@ -1,33 +1,46 @@
-// pages/FavoriteRecipesPage.js
 import React, { useMemo } from 'react';
 import useFavoriteStore from '../store/useFavoriteStore';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RecipeCard from '../component/RecipeCard';
 
-const FavoriteRecipesPage = () => {
+// Define types for the ingredients and meals
+type Meal = {
+  idMeal: string;
+  strMeal: string;
+  strCategory: string;
+  strArea: string;
+  strMealThumb: string;
+};
+
+interface Ingredient {
+  name: string;
+  quantity: string;
+}
+
+const FavoriteRecipesPage: React.FC = () => {
   const { favorites, removeFromFavorites } = useFavoriteStore();
 
   // Обчислюємо загальний список інгредієнтів
-  const ingredientsList = useMemo(() => {
-    const ingredientsMap = new Map();
+  const ingredientsList = useMemo<Ingredient[]>(() => {
+    const ingredientsMap = new Map<string, Ingredient>();
 
-    favorites.forEach((meal) => {
+    favorites.forEach((meal: Meal) => {
       for (let i = 1; i <= 20; i++) {
-        const ingredient = meal[`strIngredient${i}`];
-        const measure = meal[`strMeasure${i}`];
+        const ingredient = meal[`strIngredient${i}` as keyof Meal];
+        const measure = meal[`strMeasure${i}` as keyof Meal];
 
         if (ingredient) {
           const key = ingredient.toLowerCase(); // Робимо ключ регістронезалежним
           if (ingredientsMap.has(key)) {
             ingredientsMap.set(key, {
               name: ingredient,
-              quantity: `${ingredientsMap.get(key).quantity} + ${measure}`,
+              quantity: `${ingredientsMap.get(key)?.quantity} + ${measure || 'N/A'}`,
             });
           } else {
             ingredientsMap.set(key, {
               name: ingredient,
-              quantity: measure || '',
+              quantity: measure || 'N/A', // Show 'N/A' if measure is missing
             });
           }
         }
@@ -54,7 +67,7 @@ const FavoriteRecipesPage = () => {
       ) : (
         <>
           <div className="recipes">
-            {favorites.map((meal) => (
+            {favorites.map((meal: Meal) => (
               <RecipeCard key={meal.idMeal} meal={meal} onRemove={removeFromFavorites} showRemoveButton={true} />
             ))}
           </div>
