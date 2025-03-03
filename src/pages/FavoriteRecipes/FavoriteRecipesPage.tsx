@@ -77,7 +77,7 @@ const FavoriteRecipesPage: React.FC = () => {
       </Link>
       <h1>Favorite Recipes</h1>
       {favorites.length === 0 ? (
-        <p>No favorite recipes yet</p>
+        <p className='no-recipes-container'>No favorite recipes yet</p>
       ) : (
         <>
           <div className="recipes">
@@ -137,7 +137,7 @@ const FavoriteRecipesPage: React.FC = () => {
                           secondaryTypographyProps={{ color: 'text.secondary' }}
                         />
                       </ListItem>
-                      <Divider />
+                      <Divider color='#36d7b7/' />
                     </React.Fragment>
                   ))}
                 </List>
