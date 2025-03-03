@@ -28,18 +28,12 @@ interface MealsResponse {
 export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsParams] }): Promise<MealsResponse> => {
   const [_key, { query, page, category }] = queryKey;
 
-  let url = `${API_URL}`;
-  
-  if (category) {
-    url += `filter.php?c=${category}`; // Фільтрація за категорією
-  } else {
-    url += `search.php?s=${query || ""}`; // Пошук за назвою
-  }
+  const response = await axios.get<MealsResponse>(
+    `${API_URL}search.php?s=${query || ""}&page=${page || 1}${category ? `&c=${category}` : ""}`
+  );
 
-  const response = await axios.get<MealsResponse>(url);
   return response.data;
 };
-
 
 export const fetchMealById = async (id: string | undefined): Promise<Meal | undefined> => {
   if (!id) return undefined;
