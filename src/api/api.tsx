@@ -6,6 +6,7 @@ const API_URL = "https://www.themealdb.com/api/json/v1/1/";
 interface FetchMealsParams {
   query: string;
   page: number;
+  category:string;
 }
 
 // Тип для результату запиту
@@ -25,14 +26,20 @@ interface MealsResponse {
 }
 
 export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsParams] }): Promise<MealsResponse> => {
-  const [_key, { query, page }] = queryKey;
+  const [_key, { query, page, category }] = queryKey;
 
-  const response = await axios.get<MealsResponse>(
-    `${API_URL}search.php?s=${query || ""}&page=${page || 1}`
-  );
+  let url = `${API_URL}`;
+  
+  if (category) {
+    url += `filter.php?c=${category}`; // Фільтрація за категорією
+  } else {
+    url += `search.php?s=${query || ""}`; // Пошук за назвою
+  }
 
-  return response.data; // Повертаємо всю відповідь
+  const response = await axios.get<MealsResponse>(url);
+  return response.data;
 };
+
 
 export const fetchMealById = async (id: string | undefined): Promise<Meal | undefined> => {
   if (!id) return undefined;

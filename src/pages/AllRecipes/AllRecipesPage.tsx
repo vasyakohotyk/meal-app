@@ -31,10 +31,11 @@ const AllRecipesPage: React.FC = () => {
     localStorage.setItem('selectedCategory', selectedCategory);
   }, [searchQuery, selectedCategory]);
 
-  const handleSearchChange = debounce((query: string) => {
-    setSearchQuery(query);
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
     setPage(1);
-  }, 3000);
+  };
+  
 
   //@ts-ignore
   const { data, isLoading, isError }: { data: MealsData | any, isLoading: boolean, isError: boolean } = useQuery({
@@ -43,6 +44,7 @@ const AllRecipesPage: React.FC = () => {
     keepPreviousData: true,
     enabled: true, 
   });
+  
 
   const filteredMeals = useMemo(() => {
     if (!data?.meals) return [];
@@ -67,11 +69,12 @@ const AllRecipesPage: React.FC = () => {
           placeholder="Search for recipes..."
           value={searchQuery}
         />
-        <select
-          className="category-select"
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          value={selectedCategory}
-        >
+       <select
+  className="category-select"
+  onChange={(e) => handleCategoryChange(e.target.value)}
+  value={selectedCategory}
+>
+
           <option value="">All Categories</option>
           {Array.from(new Set(data?.meals?.map((meal: any) => meal.strCategory))).map((category: any) => (
             <option key={category} value={category}>
