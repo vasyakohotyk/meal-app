@@ -1,0 +1,158 @@
+/* Загальні стилі для сторінки */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  /* Стиль заголовку сторінки */
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #6200ea;
+    margin: 30px 0;
+    font-weight: 700;
+  }
+  
+  /* Стиль для секції з рецептами */
+  .recipes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+    
+  }
+  
+  /* Стилі для карток рецептів */
+  .recipe-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+  
+  .recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .recipe-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .recipe-card h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 15px 0;
+    color: #6200ea;
+  }
+  
+  .recipe-card p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .recipe-card button {
+    background-color: #ff4081;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    
+  }
+  
+  .recipe-card button:hover {
+    background-color: #d5006d;
+  }
+  
+  /* Стиль для списку інгредієнтів */
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #6200ea;
+    font-weight: 700;
+  }
+  
+  /* Стилі для списку інгредієнтів */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1.1rem;
+    color: #444;
+    margin-top: 20px;
+    padding-left: 20px;
+  }
+  
+  ul li {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  ul li:nth-child(even) {
+    background-color: #e7e7e7;
+  }
+  
+  ul li span {
+    font-weight: bold;
+    color: #6200ea;
+  }
+  
+  /* Стилі для повідомлення відсутності рецептів */
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    margin: 40px 0;
+  }
+  
+.recipe-card button {
+    background-color: #ff5252; /* Червоний колір для видалення */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 50px; /* Округлені кути для сучасного вигляду */
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 20px; /* Додаємо відступ після кнопки */
+    width: 90%; /* Ширина кнопки займає всю доступну ширину контейнера */
+    max-width: 200px; /* Максимальна ширина кнопки */
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Додаємо плавний перехід */
+}
+
+.recipe-card button:hover {
+    background-color: #f92929; /* Темніший червоний колір при наведенні */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Тінь при наведенні */
+}
+
+.recipe-card button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(98, 0, 234, 0.3); /* Фокусний ефект для кнопки */
+}
+
+  
+  
