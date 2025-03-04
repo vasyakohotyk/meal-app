@@ -8,7 +8,6 @@ import './AllRecipes.css';
 import { ClipLoader } from 'react-spinners';
 import Pagination from '../../component/Pagination/Pagination';
 
-// Вказуємо типи як any для уникнення помилок
 interface Meal {
   idMeal: string;
   strCategory: string;
