@@ -2,14 +2,12 @@ import axios from "axios";
 
 const API_URL = "https://www.themealdb.com/api/json/v1/1/";
 
-// Типи для параметрів запиту
 interface FetchMealsParams {
   query: string;
   page: number;
   category:string;
 }
 
-// Тип для результату запиту
 interface Meal {
   idMeal: string;
   strMeal: string;
@@ -17,7 +15,6 @@ interface Meal {
   strArea: string;
   strInstructions: string;
   strMealThumb: string;
-  // Додати інші поля, які повертаються API, якщо потрібно
 }
 
 // Тип для результату пошуку
@@ -30,14 +27,12 @@ export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsPa
   const [_key, { query, category }] = queryKey;
 
   if (category) {
-    // 1️⃣ Отримуємо список страв у цій категорії
     const response = await axios.get<{ meals: { idMeal: string }[] }>(
       `${API_URL}filter.php?c=${category}`
     );
 
     if (!response.data.meals) return { meals: [], totalResults: 0 };
 
-    // 2️⃣ Для кожного ID страви отримуємо деталі через lookup.php?i=...
     const detailedMeals = await Promise.all(
       response.data.meals.map(async (meal) => {
         const mealResponse = await axios.get<{ meals: Meal[] }>(
@@ -49,7 +44,6 @@ export const fetchMeals = async ({ queryKey }: { queryKey: [string, FetchMealsPa
 
     return { meals: detailedMeals, totalResults: detailedMeals.length };
   } else {
-    // Якщо категорія не вибрана, використовуємо стандартний пошук
     const response = await axios.get<MealsResponse>(`${API_URL}search.php?s=${query || ""}`);
     return response.data;
   }
