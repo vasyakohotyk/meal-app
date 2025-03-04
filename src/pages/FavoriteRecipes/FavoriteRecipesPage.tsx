@@ -49,7 +49,7 @@ const FavoriteRecipesPage: React.FC = () => {
             if (existing.unit === unit) {
               existing.value += value;
             } else {
-              existing.value += value; // Якщо одиниці різні, просто додаємо (можливо, знадобиться покращити логіку)
+              existing.value += value; 
             }
           } else {
             ingredientsMap.set(key, { value, unit });
@@ -86,7 +86,6 @@ const FavoriteRecipesPage: React.FC = () => {
             ))}
           </div>
   
-          {/* Контейнер для розташування двох блоків поруч */}
           <div
             style={{
               display: 'grid',
@@ -96,7 +95,7 @@ const FavoriteRecipesPage: React.FC = () => {
               padding: '20px',
             }}
           >
-            {/* 🔹 Блок інгредієнтів */}
+       
             <Card sx={{minWidth: 340, maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
@@ -120,7 +119,6 @@ const FavoriteRecipesPage: React.FC = () => {
               </CardContent>
             </Card>
   
-            {/* 🔹 Блок інструкцій */}
             <Card sx={{ maxWidth: 500, margin: '0 auto', boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
