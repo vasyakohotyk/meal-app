@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMealById } from '../../api/api';
 import { useParams, Link } from 'react-router-dom';
-import useFavoriteStore from '../../store/useFavoriteStore'; // Підключаємо zustand
-import { Button } from '@mui/material'; // Імпортуємо компонент Button з MUI
+import useFavoriteStore from '../../store/useFavoriteStore'; 
+import { Button } from '@mui/material'; 
 
 import './SingleRecipePage.css'
 
@@ -14,7 +14,7 @@ const SingleRecipePage = () => {
     queryFn: () => fetchMealById(id),
   });
 
-  const { addToFavorites, favorites } = useFavoriteStore(); // Отримуємо методи з Zustand
+  const { addToFavorites, favorites } = useFavoriteStore();
 
   const isFavorite = favorites.some((meal) => meal.idMeal === data?.idMeal);
 
@@ -29,7 +29,7 @@ const SingleRecipePage = () => {
 
   return (
     <div className="single-recipe-page">
-      {/* Кнопка повернення назад */}
+   
       <Link to="/" className="back-button-link">
         <Button variant="outlined" color="primary" className="back-button">
           Back to All Recipes
@@ -57,7 +57,6 @@ const SingleRecipePage = () => {
         <h3>Instructions:</h3>
         <p>{data.strInstructions}</p>
 
-        {/* Кнопка для додавання в обране */}
         <Button
           variant="contained"
           color={isFavorite ? 'success' : 'primary'}
